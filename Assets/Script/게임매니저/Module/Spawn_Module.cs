@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Spawn_Module : MonoBehaviour
+{
+    GameManager_Scene core;
+    public void Init(GameManager_Scene gameManager)
+    {
+        core = gameManager;
+        G_Excutor.Subscribe<SpawnDTO_Basic>("DebugSpawn", Spawn);
+        G_Excutor.Subscribe<GameObject>("DebugStore2", ListStore_LifeCycle);
+    }
+    public void Spawn(SpawnDTO_Basic DTO)
+    {
+        if (DTO.prefebObject == null) return;
+
+        GameObject instance = G_ObjPool.Get(DTO.prefebObject);
+        if (instance == null) return;
+        if (!instance.TryGetComponent<IPoolable>(out var poolable))
+        {
+            Debug.LogError($"[Spawn_Module] 스폰 실패. '{DTO.prefebObject.name}' 허가되지 않은 컴포넌트.");
+            G_ObjPool.Release(instance);
+            return;
+        }
+        poolable.Init(() => G_ObjPool.Release(instance));
+        AfterActionBoot(DTO.AfterAction, instance);// 경고를 하는게맞나 없으면 근데사실..없어도되는애가있을수도잇잔아?
+        return;
+    }
+    //일부러 오브젝트로보냄 뭐 나중에 애프터액션을하는데 다른개념이나올수도있는데 인터페이스째 보내는건아님
+    void AfterActionBoot(RoundActionSO actionSO, GameObject instance)
+    {
+        if (actionSO == null) return;
+        if (actionSO is IAction_Receiver receiver)
+        {
+            receiver.Action(instance);
+            return;
+        }
+        actionSO.Action();
+    }
+    //기본적으로 일단 라운드자체에서 애들을 추적하고관제할 참조통로 라이프사이클이 필요함.
+    public List<ILifecycleBindable> Test_LifeCycle = new();
+    public List<GameObject> Test_LifeCycleView = new();
+
+    public List<IContactable> Test_Contactable = new();
+    public List<GameObject> Test_ContactableView = new();
+
+    [SerializeField] private List<Transform> startTransforms;
+    [SerializeField] private List<Transform> MiddleTransforms;
+    [SerializeField] private List<Transform> endTransforms;
+
+
+    void ListStore_LifeCycle(GameObject obj)
+    {
+        if (obj.TryGetComponent<ILifecycleBindable>(out var lifecycleBindable))
+        {
+            Test_LifeCycle.Add(lifecycleBindable);
+            Test_LifeCycleView.Add(obj);
+
+            lifecycleBindable.OnLifeBind(ListRemove_LifeCycle);
+            //경로및 추가데이터 주입..아마 이부분은 상당히바뀔지도.
+            // 경고 위치는 반드시 시작점과 갈점 두개이상은되어야함 이점 중요
+            int randomStartIdx  = UnityEngine.Random.Range(0, startTransforms.Count);
+            int randomMiddleIdx = UnityEngine.Random.Range(0, MiddleTransforms.Count);
+            int randomEndIdx    = UnityEngine.Random.Range(0, endTransforms.Count);
+
+            Vector2 randomStart  = startTransforms[randomStartIdx].position;
+            Vector2 randomMiddle = MiddleTransforms[randomMiddleIdx].position;
+            Vector2 randomEnd    = endTransforms[randomEndIdx].position;
+
+            DotPathVer2 path = new()
+            {
+                Waypoints = new List<Vector2> { randomStart, randomMiddle, randomEnd }
+            };
+            // 첫번째랑 두번째 위치랑 첫번째랑 두번째 상대각 즉 첫번째에서두번째 바라보는각도 추출
+            Vector2 FirstPos = path.Waypoints[0];
+            Vector2 SecondPos = path.Waypoints[1];
+            //아 물론 고찰이 하나있음 유니티자체각을 안쓴다는거임.. 뭐 근데생각해보니 안써도될거같기도하고?
+            //이놈은 레이더가쓰는게아니라 항적자체라 굳이,,간할거같은데? 
+            //시그널 클래스 참고하고 필요하면수정해야지뭐,
+            Vector2 dir = FirstPos - SecondPos;
+            float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            // 여기서 생성 위치랑 방위 잡도록함 물론 월드좌표 기준.
+            obj.SetActive(false);
+            obj.transform.SetPositionAndRotation(FirstPos, Quaternion.Euler(0f, 0f, targetAngle));
+            obj.SetActive(true);
+
+
+            if (lifecycleBindable is ISelectable Sel)
+            {
+                Sel.SetPath(path);
+            }
+
+            if (lifecycleBindable is IContactable Con) // 컨텍에이블.이놈은 사실은.. 여기있으면안됨 다만 일단두기로함
+            {
+                ListStore_Contactable(Con);
+            }
+
+        }
+    }
+    void ListRemove_LifeCycle(ILifecycleBindable obj)
+    {
+        if (Test_LifeCycle.Contains(obj))
+        {
+            Test_LifeCycle.Remove(obj);
+            if (obj is MonoBehaviour mono) Test_LifeCycleView.Remove(mono.gameObject);
+
+        }
+
+    }
+
+    void ListStore_Contactable(IContactable selectable)
+    {
+        Test_Contactable.Add(selectable);
+        if (selectable is MonoBehaviour mono) Test_ContactableView.Add(mono.gameObject);
+
+        selectable.OnContacted(ListRemove_Contactable);
+    }
+    void ListRemove_Contactable(IContactable selectable)
+    {
+        if (Test_Contactable.Contains(selectable))
+        {
+            Test_Contactable.Remove(selectable);
+            if (selectable is MonoBehaviour mono) Test_ContactableView.Remove(mono.gameObject);
+        }
+    }
+
+    /*
+    public List<IContactable> 테스트용리스트_개선된몹구조 = new();
+    public List<Trackable_Aircraft> 테스트용리스트_비행체 = new();
+    public List<Trackable_Aircraft> 테스트용리스트_미사일 = new();
+    */
+    /*
+    public GameObject Spawn(GameObject prefab)
+    {
+        // 작업 프로세스
+        // 1 프리팹 확인 위치정보확인
+        // 2 생성후 풀 등록 ,점멸상태를 방지하기위해 즉시 비활성
+        // 3 위치 지정
+        // 4 인스턴스 장착, 인터페이스 없을시 즉시 회수
+        // 5 활성화
+        if (prefab == null) return null;
+
+        GameObject instance = G_ObjPool.Get(prefab);
+        if (instance == null) return null;
+
+        instance.SetActive(false);
+        //instance.transform.SetPositionAndRotation(0, 0);
+
+        if (instance.TryGetComponent<IPoolable>(out var poolable))
+        {
+            // 원래는 행동이나 처리도 액션으로 넣을려했음
+            // 근데 이러면 스폰매니저에 커넥터를 우겨넣어야하고 그로인해 복잡성이증가함
+            // 어짜피 이 모듈은 생성만 담당, 다음제어는 생성자가 주입시켜야한다 생각함
+            // 뭐 이니트말고 인젝트 액션메서드를 인터페이싱해서 스타트전에 하게할까?
+            // 근데 그거도애매하고,, 뭐 만들다보면 답이나오겠지
+            poolable.Init(() => G_ObjPool.Release(instance));
+        }
+        else
+        {
+            G_ObjPool.Release(instance);
+            return null;
+        }
+        
+        instance.SetActive(true);
+        return instance;
+    }
+    */
+}
+[Serializable]
+public class SpawnDTO_Basic
+{
+    public GameObject prefebObject;
+    public RoundActionSO AfterAction;
+}

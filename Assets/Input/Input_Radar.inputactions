@@ -1,0 +1,196 @@
+{
+    "version": 1,
+    "name": "Input_Radar",
+    "maps": [
+        {
+            "name": "Radar",
+            "id": "60e0f62a-da5d-4286-ae8d-e0aae06ac4cf",
+            "actions": [
+                {
+                    "name": "HeadOnWay",
+                    "type": "Value",
+                    "id": "4d600e5a-81ad-4ee5-a59c-bc340f74346f",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SelectBtn",
+                    "type": "Button",
+                    "id": "b00fc6d3-94b7-4ea1-878c-6636719c175b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LockOnBtn",
+                    "type": "Button",
+                    "id": "16c73a4b-02bf-4fea-a2cb-0ad3455396d5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TWSOnBtn",
+                    "type": "Button",
+                    "id": "253c0bb1-9922-42a2-a190-74c3bda48f6c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PowerBtn",
+                    "type": "Button",
+                    "id": "0c315fdd-ef3b-431d-b39c-8f739a91671e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "1D Axis",
+                    "id": "63d0da88-89f6-4cfa-9226-d6a5dec0c71d",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HeadOnWay",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "2c40b361-d4e1-41eb-a147-c5e2ce1ebf18",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HeadOnWay",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "e6a21b4c-06e2-4659-9602-f0fc1ecca169",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HeadOnWay",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "52942ce5-60cb-4671-b9bb-29567e524bb7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
+                    "groups": "",
+                    "action": "SelectBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00a05955-14a4-4fe3-b90a-173a3ea461e3",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "SelectBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3be2964-c185-4243-be1f-9738c4ff3d41",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LockOnBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ed5152c-39ae-4d34-a760-5bd0302942df",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TWSOnBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9af62a3-855c-474c-b5aa-839cc1b2ab28",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PowerBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "FCS",
+            "id": "d7f09b69-2630-41ab-8240-fcbfca6f1a0c",
+            "actions": [
+                {
+                    "name": "FireBtn",
+                    "type": "Button",
+                    "id": "8346efc4-9ffa-4b18-9492-673786fd257a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeBtn",
+                    "type": "Value",
+                    "id": "815aa11e-8a01-46eb-8516-9d3d0d5cbb37",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d733e814-918a-4092-9500-7ef779761da2",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "837bb6a2-80fb-40ed-a6c0-59a051bacde0",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeBtn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
