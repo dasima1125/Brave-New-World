@@ -162,10 +162,20 @@ public class Guided : Projectile
     }
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
+        //이제 이거버림 인터페이스화 
+        //물론 이거자체도싹바꿔여험
+        /*
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Type : " + Logic.ToString());
             base.OnTriggerEnter2D(collision);
+        }
+        */
+        if(collision.gameObject.TryGetComponent<IDamageable>
+        (out var target))
+        {
+            Debug.Log("인터페이스 테스트 {프로젝타일}");
+            target.TakeDamage(11);
         }
     }
 

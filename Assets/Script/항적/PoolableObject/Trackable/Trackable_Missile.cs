@@ -5,9 +5,12 @@ using UnityEngine;
 public class Trackable_Missile : TrackableObject, ISelectable, IDamageable
 {
 
-    public bool IsDestroyed => throw new System.NotImplementedException();
-    public void TakeDamage(float damage) => throw new System.NotImplementedException();
-
+    public bool IsDestroyed => throw new System.NotImplementedException();//암만봐도 이건 하자마자 킬나올꺼라
+    //문제가없음
+    //근데연출과함게 한다면 또몰라
+    //또근데 레이더가어케 그거하나하나 알아야해? 그것도말이안되잔아
+    //흠
+    
     [SerializeField] TargetDataSO data;
     DotPathVer2 WayMap;
     [SerializeField] float globalProgress;
@@ -114,6 +117,18 @@ public class Trackable_Missile : TrackableObject, ISelectable, IDamageable
         AltPath();
         Debug.Log("[미사일] 폭파실행");
         Kill();
+    }
+    public int testhp = 1;
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log("인터페이스 테스트 {타겟}");
+        testhp -=(int)damage;
+        if(testhp<= 0)
+        {
+            Debug.Log("제거됨 {데미지 인터페이스 시스템}");
+            Kill();
+        }
     }
 
 
