@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Brave-New-World.slnx"
+    "dotnet.defaultSolution": "Brave New World.slnx"
 }
