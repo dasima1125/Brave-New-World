@@ -29,6 +29,7 @@ public abstract class TrackableObject : PooledObject, ILifecycleBindable, IConta
 
     protected override void Kill()
     {
+        if (!ActiveObject) return;
 
         action_Life?.Invoke(this);
         action_Life = null;
@@ -40,8 +41,10 @@ public abstract class TrackableObject : PooledObject, ILifecycleBindable, IConta
         base.Kill();
     }
 
-
-
+    public void FlushOrder()
+    {
+        Kill();
+    }
 }
 [Serializable]
 public struct PosData

@@ -80,6 +80,9 @@ public class TestEnemy : PooledObject, ILifecycleBindable
 
     }
 
-    
+    public void FlushOrder()
+    {
+        throw new NotImplementedException();
+    }
 }
 

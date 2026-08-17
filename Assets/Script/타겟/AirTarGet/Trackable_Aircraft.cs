@@ -7,7 +7,7 @@ public class Trackable_Aircraft : TrackableObject, ISelectable, IDamageable
     //이건 꼭 필요한건진 모르겠음
 
     public bool IsDestroyed => throw new NotImplementedException();
-    public void TakeDamage(float damage) => Debug.Log("타격받음");
+    
 
 
     [SerializeField] TargetDataSO data;
@@ -49,7 +49,7 @@ public class Trackable_Aircraft : TrackableObject, ISelectable, IDamageable
         currentTimer += G_Time.Dtime;
         AltPath();
         WayTracker_TestAirCraft();
-        if (currentTimer >= LifeTime) Kill();
+        if (currentTimer >= LifeTime) DestroyTarget();
     }
     void WayTracker_TestAirCraft()
     {
@@ -109,10 +109,17 @@ public class Trackable_Aircraft : TrackableObject, ISelectable, IDamageable
         altitude = data.altitude * heightRatio;
     }
 
+    public void TakeDamage(float damage) =>DestroyTarget(); 
+    void DestroyTarget()
+    {
+        Debug.Log("타격받음");
+        // 전달을 해야겟지아마? 룰한테든 스폰한테든말이야
+        Kill();
+    }
+
     protected override void Kill()
     {
         _active = false;
-        Debug.Log("[철수] 비행체");
         base.Kill();
 
     }

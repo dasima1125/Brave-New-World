@@ -102,6 +102,7 @@ public interface ILifecycleBindable // 객체추적용..근데 오브젝트 풀�
 // 추가 : 부모를 공통으로 선언할꺼임 이거쓰는건 기본적으로 아마 오브젝트풀이랑 공통접근부모가있을예정
 // 아마도? // 철수자를 굳이 인터페이스화시켜야할까?
 {
+    void FlushOrder();
     void OnLifeBind(System.Action<ILifecycleBindable> onRelease);
 
 }
