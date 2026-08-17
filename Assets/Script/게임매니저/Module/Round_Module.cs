@@ -12,6 +12,9 @@ public class Round_Module : MonoBehaviour
     public void Init(GameManager_Scene gameManager)
     {
         core = gameManager;
+        
+        G_Excutor.Subscribe("GameDefeat", RoundKill_LOSE);
+        
         GameStart();
         //TODO : 이건 이니트보단 게임 시작시 별도의 메서드로 처리해야함 
         //       로드한게임일수도 새 게임일수도있으니.. 일단은 임시로 만듬 테스트용이니 처음부터
@@ -52,8 +55,11 @@ public class Round_Module : MonoBehaviour
     }
     void Call_EndRound()
     {
-        core.SetPhase(Phase_Main.END); //외부조건으로 나가면 END페이즈갱신을 한번더하긴하는데 흠,,,. 아니면 별도의 상태를만들어야하나? 근데 그게더 문제를만들지도?
-        IsVictory();
+        core.SetPhase(Phase_Main.END);
+        Debug.Log($"<color=yellow>[Round] 라운드 종료사유 : {RoundRecodes.Outcome}</color>");
+        IsVictory(); // <- 이건 사실쓰면안됨 애당초 라운드를통으로넘김 
+                     // 아직 유아이개념을 정립못해서임
+        UIManager_InGame.Test_RoundResult(RoundRecodes.Outcome);
     }
 
     void Call_ReceiveDuration(float deltaTime) // 이게 액션팩 작동자임 와일조건맞으면 실행 근데구조 개떡같음..
@@ -100,6 +106,11 @@ public class Round_Module : MonoBehaviour
         RoundRecodes.Outcome = Round_Outcome.DEBUG;
         core.SetPhase(Phase_Main.END);
     }
+    public void RoundKill_LOSE()
+    {
+        RoundRecodes.Outcome = Round_Outcome.LOSE;
+        core.SetPhase(Phase_Main.END);
+    }
 
 
 }
@@ -123,8 +134,8 @@ public class Round_Recode
 public enum Round_Outcome
 {
     PASS,
-    DEBUG
-
+    DEBUG,
+    LOSE,
 }
 
 [Serializable]

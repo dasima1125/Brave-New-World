@@ -27,10 +27,12 @@ public class GameManager_Scene : MonoBehaviour
         Modules?._Phase.Init(this);
         Modules?._Round.Init(this);
         Modules?._Spawn.Init(this);
+        Modules?._Rule.Init(this);
     }
     void OnDestroy() => Kill();
 
     #region 라운드 모듈 접근부
+    public void Request_RoundLose() => Modules._Round.RoundKill_LOSE();
         
     #endregion
 
@@ -56,9 +58,12 @@ public class GameManager_Scene : MonoBehaviour
     #endregion
 
     #region 스폰 모듈 접근부
-    //public void RequestSpawn(GameObject prefeb)
-    //    => Modules._Spawn.Spawn(prefeb, Vector3.zero, Quaternion.identity);
+    /*
     
+    public void RequestSpawn(GameObject prefeb)
+    => Modules._Spawn.Spawn(prefeb, Vector3.zero, Quaternion.identity);
+    
+    */    
     #endregion
 
     void ToolUpdate()
@@ -83,4 +88,5 @@ public class GameModules
     public Phase_Module _Phase;
     public Round_Module _Round;
     public Spawn_Module _Spawn;
+    public Rule_Module _Rule; 
 }

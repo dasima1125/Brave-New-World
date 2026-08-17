@@ -39,10 +39,10 @@ public class Spawn_Module : MonoBehaviour
         actionSO.Action();
     }
     //기본적으로 일단 라운드자체에서 애들을 추적하고관제할 참조통로 라이프사이클이 필요함.
-    public List<ILifecycleBindable> Test_LifeCycle = new();
+    public List<ILifecycleBindable> Test_LifeCycle = new(); // 풀링 대상인가
     public List<GameObject> Test_LifeCycleView = new();
 
-    public List<IContactable> Test_Contactable = new();
+    public List<IContactable> Test_Contactable = new(); // 추적해야할 대상인가
     public List<GameObject> Test_ContactableView = new();
 
     [SerializeField] private List<Transform> startTransforms;
@@ -109,7 +109,6 @@ public class Spawn_Module : MonoBehaviour
         }
 
     }
-
     void ListStore_Contactable(IContactable selectable)
     {
         Test_Contactable.Add(selectable);

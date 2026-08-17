@@ -1,16 +1,22 @@
 using UnityEngine;
 
-public class GroundTarget_T : MonoBehaviour
+public class GroundTarget_T : MonoBehaviour, IDamageable_Ally
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public bool IsDestroyed { get; private set; } = false;
+
+    public void TakeDamage(float damage)
     {
-        
+        if (IsDestroyed) return;
+        Debug.Log($"아군목표 피격당함 : 도시 피격");
+        IsDestroyed = true;
+        G_Excutor.Call("CityDestroyed");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+}
+public interface IDamageable_Ally
+
+{
+    bool IsDestroyed { get; }
+    void TakeDamage(float damage);
 }

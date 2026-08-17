@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Day_1
   m_EditorClassIdentifier: Assembly-CSharp::RoundDataSO
   RoundScriptName: "1\uC77C\uCC28 (\uD14C\uC2A4\uD2B8 \uD14D\uC2A4\uD2B8)"
-  RoundTime: 11
+  RoundTime: 60
   testActionPack:
     Actions:
     - ActionSO: {fileID: 11400000, guid: 5aa65ab728d8cb54ba4b339c0195ce5c, type: 2}

@@ -7,7 +7,7 @@ public class Trackable_Aircraft : TrackableObject, ISelectable, IDamageable
     //이건 꼭 필요한건진 모르겠음
 
     public bool IsDestroyed => throw new NotImplementedException();
-    public void TakeDamage(float damage) => throw new NotImplementedException();
+    public void TakeDamage(float damage) => Debug.Log("타격받음");
 
 
     [SerializeField] TargetDataSO data;

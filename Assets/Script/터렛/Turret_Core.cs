@@ -11,8 +11,6 @@ public class Turret_Core : MonoBehaviour
     [Header("터렛 모듈")]
     [SerializeField] TurretModules _Moudles;
     ActionPack_AMM ActionAMM;
-    [Header("투사체 2차 개발 테스트배드")]
-    [SerializeField] GameObject ProjectilePrefab;
     
     public void Start()
     {
@@ -51,14 +49,6 @@ public class Turret_Core : MonoBehaviour
         if(way == 0) return;
         _Moudles.Storage.NextSlotAMM(way);
     }
-    [ContextMenu("테스트 발사")]
-    public void OnClickTest()
-    {
-        Debug.Log("클릭됨");
-        var projectile = Instantiate(ProjectilePrefab, transform.position, Quaternion.Euler(0, 0, 270)).GetComponent<Munition>();
-        projectile.Init(10f);
-    }
-
 
 }
 [Serializable]

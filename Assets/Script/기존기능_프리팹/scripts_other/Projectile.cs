@@ -63,13 +63,14 @@ public class Projectile : MonoBehaviour
             Speed = ProjectileSpeed
         };
     }
-
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
-    {
-    }
     void OnDestroy()
     {
         KillCode?.Invoke();
+    }
+    protected void Blast()
+    {
+        Debug.Log("요격성공");
+        Destroy(gameObject);
     }
 
 }
@@ -100,7 +101,6 @@ public class Guided : Projectile
         maxAngularVelocity= data.MaxAngularVelocity;
         navigationConstant = data.NavigationConstant;
         
-
         base.Init(data.ProjectileSpeed, data.LifeTime);
     }
     public void ReceiveCommand(TNS2DData data) => TNS = data;
@@ -155,22 +155,13 @@ public class Guided : Projectile
         Gizmos.DrawWireCube(TNS.position, Vector3.one * 2);
         Gizmos.DrawLine(TNS.position, leadPoint);
     }
-    protected override void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        //이제 이거버림 인터페이스화 
-        //물론 이거자체도싹바꿔여험
-        /*
-        if (collision.gameObject.CompareTag("Enemy"))
+        if(collision.gameObject.TryGetComponent<IDamageable>(out var target))
         {
-            Debug.Log("Type : " + Logic.ToString());
-            base.OnTriggerEnter2D(collision);
-        }
-        */
-        if(collision.gameObject.TryGetComponent<IDamageable>
-        (out var target))
-        {
-            Debug.Log("인터페이스 테스트 {프로젝타일}");
             target.TakeDamage(11);
+            Blast();
+       
         }
     }
 
